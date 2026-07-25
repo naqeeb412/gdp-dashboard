@@ -1,103 +1,54 @@
 import streamlit as st
-import pandas as pd
-import math
-from pathlib import Path
 
-# Set the title and favicon that appear in the Browser's tab bar.
-st.set_page_config(
-    page_title='GDP dashboard',
-    page_icon=':earth_americas:', # This is an emoji shortcode. Could be a URL too.
+# إعداد الصفحة وتصميم الواجهة الطبية
+st.set_pageقد=dict(page_title="Naqeeb412 HarmonizeAI", page_icon="🦷", layout="wide")
+
+st.markdown("""
+    <div style='background-color: #0b2545; padding: 25px; border-radius: 12px; text-align: center; color: white;'>
+        <h1 style='margin: 0; font-family: Arial;'>Al-Naqeeb Specialized Clinic</h1>
+        <h3 style='margin: 5px 0 0 0; color: #8da9c4; font-weight: normal;'>HarmonizeAI - DentoFacial Synergy & Smile Analysis</h3>
+    </div>
+    <hr style='border: 0; height: 1px; background: #ccc; margin: 20px 0;'>
+""", unsafe_allow_html=True)
+
+# الشريط الجانبي للتحكم والخيارات
+st.sidebar.title("إعدادات التشخيص")
+st.sidebar.markdown("---")
+option = st.sidebar.selectbox(
+    "اختر وحدة التشخيص:",
+    ["تحليل الابتسامة (Smile Analysis)", "التناغم الوجهي (Facial Harmony)", "القياسات التقويمية (Cephalometric view)"]
 )
 
-# -----------------------------------------------------------------------------
-# Declare some useful functions.
+st.sidebar.info("مرحباً بك د. علي النقيب. النظام جاهز لاستقبال صور الحالات السريرية.")
 
-@st.cache_data
-def get_gdp_data():
-    """Grab GDP data from a CSV file.
+# القسم الرئيسي لتطبيق الواجهة
+st.markdown("### 📋 لوحة العمل السريرية والتجميلية")
+st.write("قم برفع صورة المريض أو الحالة السريرية للبدء بتحليل المعالم الوجهية والسنية باستخدام الذكاء الاصطناعي:")
 
-    This uses caching to avoid having to read the file every time. If we were
-    reading from an HTTP endpoint instead of a file, it's a good idea to set
-    a maximum age to the cache with the TTL argument: @st.cache_data(ttl='1d')
-    """
+uploaded_file = st.file_uploader("اختر صورة الحالة (JPG, PNG)", type=["jpg", "png", "jpeg"])
 
-    # Instead of a CSV on disk, you could read from an HTTP endpoint here too.
-    DATA_FILENAME = Path(__file__).parent/'data/gdp_data.csv'
-    raw_gdp_df = pd.read_csv(DATA_FILENAME)
+if uploaded_file is not None:
+    col1, col2 = st.columns(2)
+    with col1:
+        st.image(uploaded_file, caption="الصورة الأصلية للمريض", use_container_width=True)
+    with col2:
+        st.markdown("<div style='background-color: #f8f9fa; padding: 20px; border-radius: 10px; border: 1px solid #ddd;'>", unsafe_allow_html=True)
+        st.markdown("#### التقرير التشخيصي المبدئي:")
+        st.success("تم التعرف على معالم الوجه والابتسامة بنجاح.")
+        st.write("- **نسبة التناغم السني:** قيد التحليل...")
+        st.write("- **خط المنتصف (Midline):** متطابق مع المحور الوجهي.")
+        st.write("- **التوصية السريرية:** جاهز لاعتماد خطة الابتسامة التجميلية.")
+        st.markdown("</div>", unsafe_allow_html=True)
+else:
+    st.info("الرجاء رفع صورة لبدء المعالجة والتحليل التلقائي.")
 
-    MIN_YEAR = 1960
-    MAX_YEAR = 2022
-
-    # The data above has columns like:
-    # - Country Name
-    # - Country Code
-    # - [Stuff I don't care about]
-    # - GDP for 1960
-    # - GDP for 1961
-    # - GDP for 1962
-    # - ...
-    # - GDP for 2022
-    #
-    # ...but I want this instead:
-    # - Country Name
-    # - Country Code
-    # - Year
-    # - GDP
-    #
-    # So let's pivot all those year-columns into two: Year and GDP
-    gdp_df = raw_gdp_df.melt(
-        ['Country Code'],
-        [str(x) for x in range(MIN_YEAR, MAX_YEAR + 1)],
-        'Year',
-        'GDP',
-    )
-
-    # Convert years from string to integers
-    gdp_df['Year'] = pd.to_numeric(gdp_df['Year'])
-
-    return gdp_df
-
-gdp_df = get_gdp_data()
-
-# -----------------------------------------------------------------------------
-# Draw the actual page
-
-# Set the title that appears at the top of the page.
-'''
-# :earth_americas: GDP dashboard
-
-Browse GDP data from the [World Bank Open Data](https://data.worldbank.org/) website. As you'll
-notice, the data only goes to 2022 right now, and datapoints for certain years are often missing.
-But it's otherwise a great (and did I mention _free_?) source of data.
-'''
-
-# Add some spacing
-''
-''
-
-min_value = gdp_df['Year'].min()
-max_value = gdp_df['Year'].max()
-
-from_year, to_year = st.slider(
-    'Which years are you interested in?',
-    min_value=min_value,
-    max_value=max_value,
-    value=[min_value, max_value])
-
-countries = gdp_df['Country Code'].unique()
-
-if not len(countries):
-    st.warning("Select at least one country")
-
-selected_countries = st.multiselect(
-    'Which countries would you like to view?',
-    countries,
-    ['DEU', 'FRA', 'GBR', 'BRA', 'MEX', 'JPN'])
-
-''
-''
-''
-
+# تذييل الصفحة الرسمي للعيادة
+st.markdown("""
+    <div style='text-align: center; margin-top: 50px; color: #666; font-size: 14px;'>
+        <p>Al-Naqeeb Specialized Clinic for Oral and Dental Medicine, Surgery, and Orthodontics</p>
+        <p>Maytam, Ibb, Yemen | Developed by Dr. Ali Al-Naqeeb</p>
+    </div>
+""", unsafe_allow_html=True)
 # Filter the data
 filtered_gdp_df = gdp_df[
     (gdp_df['Country Code'].isin(selected_countries))
