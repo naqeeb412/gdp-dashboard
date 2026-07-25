@@ -1,6 +1,5 @@
 import streamlit as st
 
-# إعداد الصفحة وتصميم الواجهة الطبية
 st.set_page_config(page_title="Naqeeb412 HarmonizeAI", page_icon="🦷", layout="wide")
 
 st.markdown("""
@@ -11,7 +10,6 @@ st.markdown("""
     <hr style='border: 0; height: 1px; background: #ccc; margin: 20px 0;'>
 """, unsafe_allow_html=True)
 
-# الشريط الجانبي للتحكم والخيارات
 st.sidebar.title("إعدادات التشخيص")
 st.sidebar.markdown("---")
 option = st.sidebar.selectbox(
@@ -21,7 +19,6 @@ option = st.sidebar.selectbox(
 
 st.sidebar.info("مرحباً بك د. علي النقيب. النظام جاهز لاستقبال صور الحالات السريرية.")
 
-# القسم الرئيسي لتطبيق الواجهة
 st.markdown("### 📋 لوحة العمل السريرية والتجميلية")
 st.write("قم برفع صورة المريض أو الحالة السريرية للبدء بتحليل المعالم الوجهية والسنية باستخدام الذكاء الاصطناعي:")
 
@@ -42,9 +39,9 @@ if uploaded_file is not None:
 else:
     st.info("الرجاء رفع صورة لبدء المعالجة والتحليل التلقائي.")
 
-# تذييل الصفحة الرسمي للعيادة
 st.markdown("""
     <div style='text-align: center; margin-top: 50px; color: #666; font-size: 14px;'>
         <p>Al-Naqeeb Specialized Clinic for Oral and Dental Medicine, Surgery, and Orthodontics</p>
         <p>Maytam, Ibb, Yemen | Developed by Dr. Ali Al-Naqeeb</p>
     </div>
+""", unsafe_allow_html=True)
